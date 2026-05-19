@@ -1,9 +1,12 @@
 package com.example.cadastro.dto;
 
+import lombok.Getter;
+
 public class LoginRequest {
 
-    private String email;
-    private String senha;
+    @Getter
+    private static String email;
+    private static String senha;
 
     public LoginRequest() {
     }
@@ -13,19 +16,15 @@ public class LoginRequest {
         this.senha = senha;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
-        this.email = email;
+        LoginRequest.email = email;
     }
 
-    public String getSenha() {
+    public static String getSenha() {
         return senha;
     }
 
     public void setSenha(String senha) {
-        this.senha = senha;
+        LoginRequest.senha = senha;
     }
 }
