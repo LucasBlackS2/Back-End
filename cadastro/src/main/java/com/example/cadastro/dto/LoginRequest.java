@@ -1,30 +1,32 @@
 package com.example.cadastro.dto;
 
-import lombok.Getter;
-
 public class LoginRequest {
 
-    @Getter
-    private static String email;
-    private static String senha;
+    private String nome;
+    private String email;
+    private String senha;
 
-    public LoginRequest() {
+    public String getNome() {
+        return nome;
     }
 
-    public LoginRequest(String email, String senha) {
-        this.email = email;
-        this.senha = senha;
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
-        LoginRequest.email = email;
+        this.email = email;
     }
 
-    public static String getSenha() {
+    public String getSenha() {
         return senha;
     }
 
     public void setSenha(String senha) {
-        LoginRequest.senha = senha;
+        this.senha = senha;
     }
 }

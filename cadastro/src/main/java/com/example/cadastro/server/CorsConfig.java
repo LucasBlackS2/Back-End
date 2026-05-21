@@ -12,12 +12,12 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // todas as rotas da API
-                        .allowedOrigins(
-                                "http://localhost:8081",   // front rodando no navegador
-                                "http://10.0.2.2:8081",    // emulador Android
-                                "http://127.0.0.1:8081",   // emulador iOS
-                                "http://192.168.0.10:8081" // exemplo: IP da máquina na rede
+                registry.addMapping("/**")
+                        .allowedOriginPatterns(
+                                "http://localhost:*",
+                                "http://127.0.0.1:*",
+                                "http://10.0.2.2:*",
+                                "http://192.168.*:*"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")

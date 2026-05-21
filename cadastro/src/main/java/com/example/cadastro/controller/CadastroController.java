@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/cadastro")
 public class CadastroController {
 
     private final CadastroRepository cadastroRepository;
@@ -26,23 +24,55 @@ public class CadastroController {
     }
 
     // Listar todos os cadastros
-    @GetMapping
+    @GetMapping("/cadastro")
     public List<Cadastro> listar() {
         return cadastroRepository.findAll();
     }
 
     // Cadastrar novo usuário
-    @PostMapping("/cadastroUser")
-    public ResponseEntity<?> cadastrarUsuario(@RequestBody LoginRequest loginRequest) {
+    @PostMapping({"/cadastro", "/cadastro/cadastroUser"})
+    public ResponseEntity<?> cadastrarUsuario(
+            @RequestBody LoginRequest loginRequest) {
+
+        if (loginRequest.getNome() == null || loginRequest.getNome().isBlank() ||
+                loginRequest.getEmail() == null || loginRequest.getEmail().isBlank() ||
+                loginRequest.getSenha() == null || loginRequest.getSenha().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of(
+                            "success", false,
+                            "message", "Nome, email e senha são obrigatórios"
+                    ));
+        }
+
+        if (loginRepository.findByEmail(loginRequest.getEmail()).isPresent() ||
+                cadastroRepository.findByEmail(loginRequest.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of(
+                            "success", false,
+                            "message", "Email já cadastrado"
+                    ));
+        }
+
+        Cadastro cadastro = new Cadastro();
+        cadastro.setNome(loginRequest.getNome());
+        cadastro.setEmail(loginRequest.getEmail());
+        cadastro.setSenha(loginRequest.getSenha());
+        cadastroRepository.save(cadastro);
+
         Login novo = new Login();
+        novo.setNome(loginRequest.getNome());
         novo.setEmail(loginRequest.getEmail());
         novo.setSenha(loginRequest.getSenha());
         loginRepository.save(novo);
-        return ResponseEntity.ok(Map.of("success", true, "message", "Usuário cadastrado com sucesso!"));
+
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Usuário cadastrado com sucesso!"
+        ));
     }
 
     // Atualizar senha
-    @PutMapping("/{id}/senha")
+    @PutMapping("/cadastro/{id}/senha")
     public ResponseEntity<?> atualizarSenha(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return cadastroRepository.findById(id)
                 .map(cadastro -> {
@@ -60,7 +90,7 @@ public class CadastroController {
     }
 
     // Deletar usuário
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/cadastro/{id}")
     public ResponseEntity<?> deletarUsuario(@PathVariable Long id) {
         return cadastroRepository.findById(id)
                 .map(cadastro -> {
