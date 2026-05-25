@@ -1,7 +1,6 @@
 package com.example.cadastro.controller;
 
 import com.example.cadastro.dto.LoginRequest;
-import com.example.cadastro.dto.LoginResponse;
 import com.example.cadastro.entity.Login;
 import com.example.cadastro.repository.LoginRepository;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class  LoginController {
+public class LoginController {
 
     private final LoginRepository loginRepository;
 
@@ -27,21 +26,18 @@ public class  LoginController {
 
     @PostMapping({"/api/loginUser", "/api/login", "/login"})
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-
         if (request.getEmail() == null || request.getEmail().isBlank() ||
                 request.getSenha() == null || request.getSenha().isBlank()) {
             return ResponseEntity.badRequest()
                     .body(Map.of(
                             "success", false,
-                            "message", "Email e senha são obrigatórios"
+                            "message", "Email e senha sao obrigatorios"
                     ));
         }
 
         return loginRepository.findByEmail(request.getEmail())
                 .map(login -> {
-
                     if (login.getSenha().equals(request.getSenha())) {
-
                         return ResponseEntity.ok(Map.of(
                                 "success", true,
                                 "message", "Login realizado com sucesso!"
@@ -54,35 +50,26 @@ public class  LoginController {
                                     "message", "Senha incorreta"
                             ));
                 })
-
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Map.of(
                                 "success", false,
-                                "message", "Usuário não encontrado"
+                                "message", "Usuario nao encontrado"
                         )));
     }
 
-
     @PutMapping({"/api/login/{id}", "/login/{id}"})
-    public ResponseEntity<?> atualizarLogin(
-            @PathVariable Long id,
-            @RequestBody LoginRequest loginRequest) {
-
+    public ResponseEntity<?> atualizarLogin(@PathVariable Long id, @RequestBody LoginRequest loginRequest) {
         return loginRepository.findById(id)
                 .map(usuario -> {
-
-                    if (loginRequest.getSenha() == null ||
-                            loginRequest.getSenha().isBlank()) {
-
+                    if (loginRequest.getSenha() == null || loginRequest.getSenha().isBlank()) {
                         return ResponseEntity.badRequest()
                                 .body(Map.of(
                                         "success", false,
-                                        "message", "Senha inválida"
+                                        "message", "Senha invalida"
                                 ));
                     }
 
                     usuario.setSenha(loginRequest.getSenha());
-
                     loginRepository.save(usuario);
 
                     return ResponseEntity.ok(Map.of(
@@ -93,7 +80,7 @@ public class  LoginController {
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Map.of(
                                 "success", false,
-                                "message", "Usuário não encontrado"
+                                "message", "Usuario nao encontrado"
                         )));
     }
 
@@ -102,9 +89,9 @@ public class  LoginController {
         return loginRepository.findById(id)
                 .map(usuario -> {
                     loginRepository.delete(usuario);
-                    return ResponseEntity.ok(Map.of("success", true, "message", "Usuário deletado com sucesso!"));
+                    return ResponseEntity.ok(Map.of("success", true, "message", "Usuario deletado com sucesso!"));
                 })
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("success", false, "message", "Usuário não encontrado")));
+                        .body(Map.of("success", false, "message", "Usuario nao encontrado")));
     }
 }

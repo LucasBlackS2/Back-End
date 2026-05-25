@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-@CrossOrigin(origins = "*")
+@RequestMapping("/cadastro")
 @RestController
 public class CadastroController {
 
@@ -23,24 +23,20 @@ public class CadastroController {
         this.loginRepository = loginRepository;
     }
 
-    // Listar todos os cadastros
     @GetMapping("/cadastro")
     public List<Cadastro> listar() {
         return cadastroRepository.findAll();
     }
 
-    // Cadastrar novo usuário
     @PostMapping({"/cadastro", "/cadastro/cadastroUser"})
-    public ResponseEntity<?> cadastrarUsuario(
-            @RequestBody LoginRequest loginRequest) {
-
+    public ResponseEntity<?> cadastrarUsuario(@RequestBody LoginRequest loginRequest) {
         if (loginRequest.getNome() == null || loginRequest.getNome().isBlank() ||
                 loginRequest.getEmail() == null || loginRequest.getEmail().isBlank() ||
                 loginRequest.getSenha() == null || loginRequest.getSenha().isBlank()) {
             return ResponseEntity.badRequest()
                     .body(Map.of(
                             "success", false,
-                            "message", "Nome, email e senha são obrigatórios"
+                            "message", "Nome, email e senha sao obrigatorios"
                     ));
         }
 
@@ -49,7 +45,7 @@ public class CadastroController {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Map.of(
                             "success", false,
-                            "message", "Email já cadastrado"
+                            "message", "Email ja cadastrado"
                     ));
         }
 
@@ -67,11 +63,10 @@ public class CadastroController {
 
         return ResponseEntity.ok(Map.of(
                 "success", true,
-                "message", "Usuário cadastrado com sucesso!"
+                "message", "Usuario cadastrado com sucesso!"
         ));
     }
 
-    // Atualizar senha
     @PutMapping("/cadastro/{id}/senha")
     public ResponseEntity<?> atualizarSenha(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return cadastroRepository.findById(id)
@@ -79,25 +74,24 @@ public class CadastroController {
                     String novaSenha = body.get("senha");
                     if (novaSenha == null || novaSenha.isBlank()) {
                         return ResponseEntity.badRequest()
-                                .body(Map.of("success", false, "message", "Senha inválida"));
+                                .body(Map.of("success", false, "message", "Senha invalida"));
                     }
                     cadastro.setSenha(novaSenha);
                     cadastroRepository.save(cadastro);
                     return ResponseEntity.ok(Map.of("success", true, "message", "Senha atualizada com sucesso!"));
                 })
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("success", false, "message", "Usuário não encontrado")));
+                        .body(Map.of("success", false, "message", "Usuario nao encontrado")));
     }
 
-    // Deletar usuário
     @DeleteMapping("/cadastro/{id}")
     public ResponseEntity<?> deletarUsuario(@PathVariable Long id) {
         return cadastroRepository.findById(id)
                 .map(cadastro -> {
                     cadastroRepository.delete(cadastro);
-                    return ResponseEntity.ok(Map.of("success", true, "message", "Usuário deletado com sucesso!"));
+                    return ResponseEntity.ok(Map.of("success", true, "message", "Usuario deletado com sucesso!"));
                 })
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("success", false, "message", "Usuário não encontrado")));
+                        .body(Map.of("success", false, "message", "Usuario nao encontrado")));
     }
 }

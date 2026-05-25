@@ -9,4 +9,5 @@ public interface CadastroRepository
         extends JpaRepository<Cadastro, Long> {
 
     Optional<Cadastro> findByEmail(String email);
+
 }
