@@ -3,6 +3,7 @@ package com.example.cadastro.controller;
 import com.example.cadastro.dto.LoginRequest;
 import com.example.cadastro.entity.Login;
 import com.example.cadastro.repository.LoginRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +19,12 @@ public class LoginController {
     public LoginController(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
     }
-
+    @Operation
     @GetMapping({"/api", "/login"})
     public List<Login> listar() {
         return loginRepository.findAll();
     }
-
+    @Operation
     @PostMapping({"/api/loginUser", "/api/login", "/login"})
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         if (request.getEmail() == null || request.getEmail().isBlank() ||

@@ -2,6 +2,7 @@ package com.example.cadastro.controller;
 
 import com.example.cadastro.entity.Funcionario;
 import com.example.cadastro.repository.FuncionarioRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class FuncionarioController {
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;
-
+    @Operation
     @PostMapping("/cadastro")
     public Map<String, Object> cadastrar(@RequestBody Funcionario funcionario) {
         Funcionario salvo = funcionarioRepository.save(funcionario);
