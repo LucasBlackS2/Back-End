@@ -19,12 +19,13 @@ public class LoginController {
     public LoginController(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
     }
-    @Operation
+    @Operation(summary ="Buscar Login do usuario")
     @GetMapping({"/api", "/login"})
     public List<Login> listar() {
         return loginRepository.findAll();
     }
-    @Operation
+
+    @Operation(summary ="Criar usuario,e verificar se ja tem no banco")
     @PostMapping({"/api/loginUser", "/api/login", "/login"})
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         if (request.getEmail() == null || request.getEmail().isBlank() ||
@@ -57,7 +58,7 @@ public class LoginController {
                                 "message", "Usuario nao encontrado"
                         )));
     }
-
+@Operation(summary ="atualizar a Senha do usuario com o ID")
     @PutMapping({"/api/login/{id}", "/login/{id}"})
     public ResponseEntity<?> atualizarLogin(@PathVariable Long id, @RequestBody LoginRequest loginRequest) {
         return loginRepository.findById(id)
@@ -84,7 +85,7 @@ public class LoginController {
                                 "message", "Usuario nao encontrado"
                         )));
     }
-
+@Operation(summary ="Delata usuario pelo ID")
     @DeleteMapping("/api/cadastro/{id}")
     public ResponseEntity<?> deletarUsuario(@PathVariable Long id) {
         return loginRepository.findById(id)

@@ -5,6 +5,7 @@ import com.example.cadastro.entity.Cadastro;
 import com.example.cadastro.entity.Login;
 import com.example.cadastro.repository.CadastroRepository;
 import com.example.cadastro.repository.LoginRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +23,12 @@ public class CadastroController {
         this.cadastroRepository = cadastroRepository;
         this.loginRepository = loginRepository;
     }
-
+@Operation(summary ="lista de Cliente")
     @GetMapping("/cadastro")
     public List<Cadastro> listar() {
         return cadastroRepository.findAll();
     }
-
+@Operation(summary ="Criar Cliente")
     @PostMapping({"/cadastro", "/cadastro/cadastroUser"})
     public ResponseEntity<?> cadastrarUsuario(@RequestBody LoginRequest loginRequest) {
         if (loginRequest.getNome() == null || loginRequest.getNome().isBlank() ||
@@ -66,7 +67,7 @@ public class CadastroController {
                 "message", "Usuario cadastrado com sucesso!"
         ));
     }
-
+@Operation(summary ="atualizar senha do Cliente")
     @PutMapping("/cadastro/{id}/senha")
     public ResponseEntity<?> atualizarSenha(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return cadastroRepository.findById(id)
@@ -83,7 +84,7 @@ public class CadastroController {
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Map.of("success", false, "message", "Usuario nao encontrado")));
     }
-
+@Operation(summary ="Delata Cliente pelo ID")
     @DeleteMapping("/cadastro/{id}")
     public ResponseEntity<?> deletarUsuario(@PathVariable Long id) {
         return cadastroRepository.findById(id)

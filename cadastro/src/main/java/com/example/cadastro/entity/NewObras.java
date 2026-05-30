@@ -3,7 +3,7 @@ package com.example.cadastro.entity;
 import jakarta.persistence.*;
 
     @Entity
-    @Table(name="obras")
+    @Table(name="Newobras")
     public class NewObras {
 
         @Id
@@ -14,21 +14,24 @@ import jakarta.persistence.*;
         private String nome;
 
         @Column(nullable = false, unique = true, length = 200)
-        private int mestrosQ;
+        private int metragem;
 
         @Column(nullable = false, length = 120)
         private int dias;
+
+        @Column(nullable = false, length = 50)
+        private tipoProjeto tipo ;
 
         public NewObras(){
 
         }
 
-        public NewObras(Long id, String nome, int mestrosQ, int dias) {
+        public NewObras(Long id, String nome, int metragem, int dias, tipoProjeto tipo) {
             this.id = id;
             this.nome = nome;
-            this.mestrosQ = mestrosQ;
+            this.metragem = metragem;
             this.dias = dias;
-
+            this.tipo = tipo;
         }
 
         public Long getId() {
@@ -47,12 +50,12 @@ import jakarta.persistence.*;
             this.nome = nome;
         }
 
-        public int getMestrosQ() {
-            return mestrosQ;
+        public int getMetragem() {
+            return metragem;
         }
 
-        public void setMestrosQ(int mestrosQ) {
-            this.mestrosQ = mestrosQ;
+        public void setMetragem(int metragem) {
+            this.metragem = metragem;
         }
 
         public int getDias() {
@@ -61,6 +64,13 @@ import jakarta.persistence.*;
 
         public void setDias(int dias) {
             this.dias = dias;
+        }
+
+        public tipoProjeto getTipoProjeto() {
+            return tipo;
+        }
+        public void setTipoProjeto( tipoProjeto  tipoProjeto) {
+            this.tipo = tipoProjeto;
         }
     }
 

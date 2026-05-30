@@ -15,17 +15,20 @@ public class MaterialController {
     public MaterialController(MaterialService service) {
         this.service = service;
     }
-    @Operation
+
+    @Operation(summary ="Cadastrar/Criar material")
     @PostMapping
     public Material cadastrar(@RequestBody Material material) {
         return service.salvar(material);
     }
-    @Operation
+
+    @Operation(summary ="List de material cadastrados")
     @GetMapping
     public List<Material> listar() {
         return service.listarTodos();
     }
-    @Operation
+
+    @Operation(summary ="Delata Material pelo ID")
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         service.deletar(id);

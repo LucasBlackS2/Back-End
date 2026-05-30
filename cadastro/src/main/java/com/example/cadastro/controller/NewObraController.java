@@ -11,18 +11,19 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/obras")
-@CrossOrigin("*")
+@RequestMapping("/NewObras")
 public class NewObraController {
 
     @Autowired
     private NewObraRepository newObrasRepository;
- @Operation
+
+ @Operation(summary ="Lista de novas obras")
     @GetMapping
     public ResponseEntity<List<NewObras>> listarTodas() {
         return ResponseEntity.ok(newObrasRepository.findAll()); // 200
     }
-@Operation
+
+@Operation(summary ="Cadastrados de Novas Obras ")
     @PostMapping
     public ResponseEntity<NewObras> cadastrar(@RequestBody NewObras obra) {
         NewObras novaObra = newObrasRepository.save(obra);
@@ -31,7 +32,7 @@ public class NewObraController {
                 .created(URI.create("/obras/" + novaObra.getId())) // 201
                 .body(novaObra);
     }
-@Operation
+@Operation(summary ="atualizer as obras ")
     @PutMapping("/{id}")
     public ResponseEntity<NewObras> atualizar(
             @PathVariable Long id,
@@ -40,14 +41,14 @@ public class NewObraController {
         return newObrasRepository.findById(id)
                 .map(obra -> {
                     obra.setNome(obraAtualizada.getNome());
-                    obra.setMestrosQ(obraAtualizada.getMestrosQ());
+                    obra.setMetragem(obraAtualizada.getMetragem());
                     obra.setDias(obraAtualizada.getDias());
 
                     return ResponseEntity.ok(newObrasRepository.save(obra)); // 200
                 })
                 .orElse(ResponseEntity.notFound().build()); // 404
     }
-@Operation
+@Operation(summary ="deletar obras ja finalizada ")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
 

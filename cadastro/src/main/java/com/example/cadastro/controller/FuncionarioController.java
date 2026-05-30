@@ -16,7 +16,7 @@ public class FuncionarioController {
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;
-    @Operation
+    @Operation(summary ="Criar Funcionário")
     @PostMapping("/cadastro")
     public Map<String, Object> cadastrar(@RequestBody Funcionario funcionario) {
         Funcionario salvo = funcionarioRepository.save(funcionario);
@@ -26,7 +26,7 @@ public class FuncionarioController {
         response.put("funcionario", salvo);
         return response;
     }
-
+@Operation(summary ="List de Funcionario")
     @GetMapping
     public List<Funcionario> listar() {
         return funcionarioRepository.findAll();
