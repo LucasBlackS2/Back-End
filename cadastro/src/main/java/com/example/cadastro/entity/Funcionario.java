@@ -2,75 +2,48 @@ package com.example.cadastro.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "funcionarios")
 public class Funcionario {
+
+    @ManyToMany(mappedBy =
+            "funcionarios")
+    private Set<NewObras> newObras = new
+            HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false, unique = true, length = 200)
+    @Column(nullable = false)
     private String cargo;
 
-    @Column(nullable = false, length = 120)
-    private String sexo;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Sexo sexo;   // agora é enum
 
-    @Column(nullable = false, length = 120)
-    private int idade;
+    @Column(nullable = false)
+    private Integer idade;
 
+    // Getters e Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Funcionario(Long id, String nome, String cargo, String sexo, int idade) {
-        this.id = id;
-        this.nome = nome;
-        this.cargo= cargo;
-        this.sexo = sexo;
-        this.idade = idade;
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-    }
-    public Funcionario() {
-    }
+    public String getCargo() { return cargo; }
+    public void setCargo(String cargo) { this.cargo = cargo; }
 
-    public Long getId() {
-        return id;
-    }
+    public Sexo getSexo() { return sexo; }
+    public void setSexo(Sexo sexo) { this.sexo = sexo; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
-    }
-
-    public String getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
-    }
-
-    public int getIdade() {
-        return idade;
-    }
-
-    public void setIdade(int idade) {
-        this.idade = idade;
-    }
+    public Integer getIdade() { return idade; }
+    public void setIdade(Integer idade) { this.idade = idade; }
 }

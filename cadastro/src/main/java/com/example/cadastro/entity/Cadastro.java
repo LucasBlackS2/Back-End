@@ -1,15 +1,22 @@
 package com.example.cadastro.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "cadastro")
 public class Cadastro {
+
+
+
+    @OneToOne
+    @JoinColumn(name = "login id")
+    private Login login;
+
+    @OneToMany(mappedBy = "cadastro")
+    Set<NewObras> newObras = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

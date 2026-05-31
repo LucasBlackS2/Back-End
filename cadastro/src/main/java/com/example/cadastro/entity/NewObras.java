@@ -2,6 +2,9 @@ package com.example.cadastro.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
     @Entity
     @Table(name="Newobras")
     public class NewObras {
@@ -9,6 +12,30 @@ import jakarta.persistence.*;
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
+
+        @ManyToOne
+        @JoinColumn(name = "cadastro")
+        private Cadastro cadastro;
+
+    @ManyToMany
+    @JoinTable(name = "new_obras_materiais",
+            joinColumns= @JoinColumn(name =
+                    "new_obras_id"),
+            inverseJoinColumns= @JoinColumn(name =
+                    "materiais_id"))
+    private Set<Material> materiais= new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "new_obras_funcionarios",
+            joinColumns= @JoinColumn(name =
+                    "new_obras_id"),
+            inverseJoinColumns= @JoinColumn(name =
+                    "funcionarios_id"))
+    private Set<Funcionario> funcionarios= new HashSet<>();
+
+    @OneToMany
+    @JoinColumn(name = "new_obras_id")
+    private Set<Cronograma> cronogramas = new HashSet<>();
 
         @Column(nullable = false, length = 200)
         private String nome;

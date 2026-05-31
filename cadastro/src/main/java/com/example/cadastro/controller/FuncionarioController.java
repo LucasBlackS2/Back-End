@@ -2,33 +2,50 @@ package com.example.cadastro.controller;
 
 import com.example.cadastro.entity.Funcionario;
 import com.example.cadastro.repository.FuncionarioRepository;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
 
     @Autowired
-    private FuncionarioRepository funcionarioRepository;
-    @Operation(summary ="Criar Funcionário")
-    @PostMapping("/cadastro")
-    public Map<String, Object> cadastrar(@RequestBody Funcionario funcionario) {
-        Funcionario salvo = funcionarioRepository.save(funcionario);
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "Cadastro realizado com sucesso!");
-        response.put("funcionario", salvo);
-        return response;
-    }
-@Operation(summary ="List de Funcionario")
+    private FuncionarioRepository repository;
+
     @GetMapping
-    public List<Funcionario> listar() {
-        return funcionarioRepository.findAll();
+    public ResponseEntity<List<Funcionario>> listar() {
+        return ResponseEntity.ok(repository.findAll());
+    }
+
+    @PostMapping("/cadastro")
+    public ResponseEntity<Funcionario> cadastrar(@RequestBody Funcionario funcionario) {
+        Funcionario novo = repository.save(funcionario);
+        return ResponseEntity.created(URI.create("/funcionarios/" + novo.getId())).body(novo);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Funcionario> atualizar(@PathVariable Long id, @RequestBody Funcionario funcionarioAtualizado) {
+        return repository.findById(id)
+                .map(funcionario -> {
+                    funcionario.setNome(funcionarioAtualizado.getNome());
+                    funcionario.setCargo(funcionarioAtualizado.getCargo());
+                    funcionario.setSexo(funcionarioAtualizado.getSexo());
+                    funcionario.setIdade(funcionarioAtualizado.getIdade());
+                    return ResponseEntity.ok(repository.save(funcionario));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        if (!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        repository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cronograma")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:19006") // ajuste para o front
 public class CronogramaController {
 
     @Autowired
@@ -26,22 +26,14 @@ public class CronogramaController {
 
     @Operation(summary = "Cadastrar etapa")
     @PostMapping
-    public ResponseEntity<Cronograma> cadastrar(
-            @RequestBody Cronograma cronograma) {
-
+    public ResponseEntity<Cronograma> cadastrar(@RequestBody Cronograma cronograma) {
         Cronograma novo = repository.save(cronograma);
-
-        return ResponseEntity
-                .created(URI.create("/cronograma/" + novo.getId()))
-                .body(novo);
+        return ResponseEntity.created(URI.create("/cronograma/" + novo.getId())).body(novo);
     }
 
     @Operation(summary = "Atualizar etapa")
     @PutMapping("/{id}")
-    public ResponseEntity<Cronograma> atualizar(
-            @PathVariable Long id,
-            @RequestBody Cronograma cronogramaAtualizado) {
-
+    public ResponseEntity<Cronograma> atualizar(@PathVariable Long id, @RequestBody Cronograma cronogramaAtualizado) {
         return repository.findById(id)
                 .map(cronograma -> {
                     cronograma.setEtapa(cronogramaAtualizado.getEtapa());
@@ -52,19 +44,13 @@ public class CronogramaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
-
     @Operation(summary = "Excluir etapa")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(
-            @PathVariable Long id) {
-
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         if (!repository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-
         repository.deleteById(id);
-
         return ResponseEntity.ok().build();
     }
 }

@@ -2,6 +2,9 @@ package com.example.cadastro.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "materiais")
 public class Material {
@@ -9,6 +12,11 @@ public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToMany(mappedBy =
+            "materiais")
+    private Set<NewObras> newObras = new
+            HashSet<>();
 
     private String nome;
 

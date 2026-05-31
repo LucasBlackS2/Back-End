@@ -7,64 +7,27 @@ import jakarta.persistence.*;
 public class Cronograma {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // id fixo, sem @GeneratedValue
 
     private Integer etapa;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private nomeEtapa tipo;
+    private NomeEtapa nomeEtapa;
 
     @Column(nullable = false)
     private Boolean concluida;
 
-    public Cronograma() {
-    }
+    // Getters e Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Cronograma(Long id, Integer etapa,nomeEtapa tipo, Boolean concluida) {
-        this.id = id;
-        this.etapa = etapa;
-        this.tipo = tipo;
-        this.concluida = concluida;
-    }
+    public Integer getEtapa() { return etapa; }
+    public void setEtapa(Integer etapa) { this.etapa = etapa; }
 
-    public Long getId() {
-        return id;
-    }
+    public NomeEtapa getNomeEtapa() { return nomeEtapa; }
+    public void setNomeEtapa(NomeEtapa nomeEtapa) { this.nomeEtapa = nomeEtapa; }
 
-    public Integer getEtapa() {
-        return etapa;
-    }
-
-    public nomeEtapa getNomeEtapas() {
-        return tipo;
-    }
-
-    public Boolean getConcluida() {
-        return concluida;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setEtapa(Integer etapa) {
-        this.etapa = etapa;
-    }
-
-    public void setNomeEtapa(nomeEtapa nomeEtapa) {
-        this.tipo = nomeEtapa;
-    }
-
-    public void setConcluida(Boolean concluida) {
-        this.concluida = concluida;
-    }
-
-    public nomeEtapa getNomeEtapa() {
-        return tipo;
-    }
-
-    public void setTipo(nomeEtapa tipo) {
-        this.tipo = tipo;
-    }
+    public Boolean getConcluida() { return concluida; }
+    public void setConcluida(Boolean concluida) { this.concluida = concluida; }
 }
